@@ -1,4 +1,5 @@
 using System;
+using UnityRequestQueue.Runtime.Audio;
 using UnityRequestQueue.Runtime.AssetManagement;
 using UnityRequestQueue.Runtime.Network;
 using UnityEngine;
@@ -68,6 +69,7 @@ namespace UnityRequestQueue.Runtime.Bootstrap
             builder.RegisterModule(new CoreModule());
             builder.RegisterModule(new NetworkModule());
             builder.RegisterModule(new AssetModule());
+            builder.RegisterModule(new AudioModule());
         }
 
         private static void CreateEventLoop(DiContainer container, GameObject root)
