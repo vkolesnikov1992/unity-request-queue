@@ -1,4 +1,5 @@
 using System;
+using UnityRequestQueue.Runtime.AssetManagement;
 using UnityRequestQueue.Runtime.Network;
 using UnityEngine;
 using Zenject;
@@ -66,6 +67,7 @@ namespace UnityRequestQueue.Runtime.Bootstrap
         {
             builder.RegisterModule(new CoreModule());
             builder.RegisterModule(new NetworkModule());
+            builder.RegisterModule(new AssetModule());
         }
 
         private static void CreateEventLoop(DiContainer container, GameObject root)
