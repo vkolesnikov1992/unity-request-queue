@@ -2,6 +2,8 @@ using System;
 using UnityRequestQueue.Runtime.Audio;
 using UnityRequestQueue.Runtime.AssetManagement;
 using UnityRequestQueue.Runtime.Network;
+using UnityRequestQueue.Runtime.Pooling;
+using UnityRequestQueue.Runtime.Presentation;
 using UnityEngine;
 using Zenject;
 
@@ -70,6 +72,8 @@ namespace UnityRequestQueue.Runtime.Bootstrap
             builder.RegisterModule(new NetworkModule());
             builder.RegisterModule(new AssetModule());
             builder.RegisterModule(new AudioModule());
+            builder.RegisterModule(new PoolingModule());
+            builder.RegisterModule(new PresentationModule());
         }
 
         private static void CreateEventLoop(DiContainer container, GameObject root)
