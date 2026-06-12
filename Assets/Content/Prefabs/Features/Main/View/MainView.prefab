@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.Features.Main.MainView
   _tabs: {fileID: 918821094445725767}
+  _viewContainer: {fileID: 5333669152683949999}
 --- !u!1001 &5151592081039698615
 PrefabInstance:
   m_ObjectHideFlags: 0

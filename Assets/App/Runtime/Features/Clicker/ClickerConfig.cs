@@ -20,6 +20,8 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         [SerializeField]
         private float _autoCollectIntervalSeconds = 3f;
         [SerializeField]
+        private bool _autoCollectWhenInactive;
+        [SerializeField]
         private string _clickSoundKey;
 
         public int CurrencyPerClick => _currencyPerClick;
@@ -29,6 +31,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         public int EnergyRestoreAmount => _energyRestoreAmount;
         public float EnergyRestoreIntervalSeconds => _energyRestoreIntervalSeconds;
         public float AutoCollectIntervalSeconds => _autoCollectIntervalSeconds;
+        public bool AutoCollectWhenInactive => _autoCollectWhenInactive;
         public string ClickSoundKey => _clickSoundKey;
     }
 }

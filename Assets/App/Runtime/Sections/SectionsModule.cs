@@ -1,4 +1,5 @@
 using UnityRequestQueue.Runtime.Bootstrap;
+using UnityRequestQueue.Runtime.Features.Clicker;
 using UnityRequestQueue.Runtime.User;
 using Zenject;
 
@@ -7,12 +8,14 @@ namespace UnityRequestQueue.Runtime.Sections
     public sealed class SectionsModule : IAppModule
     {
         private const string UserResourcesConfigPath = "Configs/UserResourcesConfig";
+        private const string ClickerConfigPath = "Configs/ClickerConfig";
 
         public void Register(IAppModuleBuilder builder)
         {
             var container = builder.Container;
 
             RegisterUserResources(container);
+            RegisterClickerConfig(container);
             RegisterSection<UserSection>(container);
         }
 
@@ -22,6 +25,13 @@ namespace UnityRequestQueue.Runtime.Sections
                      .FromScriptableObjectResource(UserResourcesConfigPath)
                      .AsSingle();
             container.Bind<UserResources>().AsSingle();
+        }
+
+        private static void RegisterClickerConfig(DiContainer container)
+        {
+            container.Bind<ClickerConfig>()
+                     .FromScriptableObjectResource(ClickerConfigPath)
+                     .AsSingle();
         }
 
         private static void RegisterSection<TSection>(DiContainer container)

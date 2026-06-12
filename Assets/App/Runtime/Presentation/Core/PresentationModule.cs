@@ -1,5 +1,6 @@
 using UnityRequestQueue.Runtime.Bootstrap;
 using UnityRequestQueue.Runtime.Factories;
+using UnityRequestQueue.Runtime.Features.Main;
 
 namespace UnityRequestQueue.Runtime.Presentation
 {
@@ -10,6 +11,11 @@ namespace UnityRequestQueue.Runtime.Presentation
             builder.Container
                    .Bind<IAsyncFactory<PresenterRequest, PresenterHandle>>()
                    .To<PresenterFactory>()
+                   .AsSingle();
+
+            builder.Container
+                   .Bind<IAppStartupStep>()
+                   .To<MainPresenterStartupStep>()
                    .AsSingle();
         }
     }
