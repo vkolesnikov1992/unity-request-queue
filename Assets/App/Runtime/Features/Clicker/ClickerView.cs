@@ -1,6 +1,7 @@
 using UnityRequestQueue.Runtime.Presentation;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityRequestQueue.Runtime.User;
 
 namespace UnityRequestQueue.Runtime.Features.Clicker
 {
@@ -8,17 +9,12 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
     public sealed class ClickerView : ViewBase
     {
         [SerializeField]
+        private UserResourcesPanel _resourcePanel;
+        [SerializeField]
         private Button _collectButton;
-        [SerializeField]
-        private ParticleSystem _clickParticles;
-        [SerializeField]
-        private RectTransform _currencyFlyRoot;
-        [SerializeField]
-        private AudioSource _audioSource;
-
+        
+        public UserResourcesPanel ResourcePanel => _resourcePanel;
         public Button CollectButton => _collectButton;
-        public ParticleSystem ClickParticles => _clickParticles;
-        public RectTransform CurrencyFlyRoot => _currencyFlyRoot;
-        public AudioSource AudioSource => _audioSource;
+        
     }
 }

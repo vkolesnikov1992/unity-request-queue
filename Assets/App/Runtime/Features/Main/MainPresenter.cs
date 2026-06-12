@@ -19,6 +19,7 @@ namespace UnityRequestQueue.Runtime.Features.Main
 
         protected override UniTask OnEnterAsync(CancellationToken cancellationToken)
         {
+            View.Tabs.Initialize(Parameters.InitialTab);
             return UniTask.CompletedTask;
         }
     }

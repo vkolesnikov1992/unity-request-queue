@@ -7,11 +7,8 @@ namespace UnityRequestQueue.Runtime.Features.Main
     public sealed class MainView : ViewBase
     {
         [SerializeField]
-        private ResourcePanelView _resourcePanel;
-        [SerializeField]
-        private MainTabsView _tabs;
-
-        public ResourcePanelView ResourcePanel => _resourcePanel;
-        public MainTabsView Tabs => _tabs;
+        private MainTabsPanel _tabs;
+        
+        public MainTabsPanel Tabs => _tabs;
     }
 }
