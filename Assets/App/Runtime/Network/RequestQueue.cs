@@ -11,7 +11,7 @@ namespace UnityRequestQueue.Runtime.Network
     public sealed class RequestQueue : IRequestQueue
     {
         private readonly IHttpClient _httpClient;
-        private readonly List<RequestItem> _pending = new List<RequestItem>();
+        private readonly List<RequestItem> _pending = new();
 
         private RequestItem _current;
         private CancellationTokenSource _currentCancellation;
@@ -23,9 +23,13 @@ namespace UnityRequestQueue.Runtime.Network
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
+        public event Action Changed;
+
         public int PendingCount => _pending.Count;
 
         public bool IsRunning => _current != null;
+
+        public int ActiveCount => _pending.Count + (IsRunning ? 1 : 0);
 
         public RequestHandle<TResponse> Enqueue<TResponse>(
             IRequestCommand<TResponse> command,
@@ -40,11 +44,14 @@ namespace UnityRequestQueue.Runtime.Network
 
             if (scope != null && scope.IsCancellationRequested)
             {
+                Log($"Canceled before enqueue '{item.Handle.Name}' id={item.Handle.Id:N} scope={scope.Name}");
                 item.Cancel(scope.Token);
                 return item.TypedHandle;
             }
 
             _pending.Add(item);
+            Log($"Enqueued '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(scope)} pending={_pending.Count}");
+            NotifyChanged();
             StartProcessingIfNeeded();
 
             return item.TypedHandle;
@@ -59,6 +66,7 @@ namespace UnityRequestQueue.Runtime.Network
 
             if (_current != null && _current.Handle.Id == handle.Id)
             {
+                Log($"Cancel running requested '{handle.Name}' id={handle.Id:N} scope={GetScopeName(handle.Scope)}");
                 _currentCancellation?.Cancel();
                 return;
             }
@@ -71,7 +79,9 @@ namespace UnityRequestQueue.Runtime.Network
             }
 
             _pending.Remove(item);
+            Log($"Canceled pending '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)} pending={_pending.Count}");
             item.Cancel(item.CancellationToken);
+            NotifyChanged();
         }
 
         public int Cancel(RequestScope scope)
@@ -91,12 +101,19 @@ namespace UnityRequestQueue.Runtime.Network
             foreach (var item in pending)
             {
                 _pending.Remove(item);
+                Log($"Canceled pending by scope '{item.Handle.Name}' id={item.Handle.Id:N} scope={scope.Name} pending={_pending.Count}");
                 item.Cancel(scope.Token);
                 canceledCount++;
             }
 
+            if (pending.Length > 0)
+            {
+                NotifyChanged();
+            }
+
             if (_current != null && _current.Scope == scope)
             {
+                Log($"Cancel running by scope requested '{_current.Handle.Name}' id={_current.Handle.Id:N} scope={scope.Name}");
                 _currentCancellation?.Cancel();
                 canceledCount++;
             }
@@ -108,10 +125,18 @@ namespace UnityRequestQueue.Runtime.Network
         {
             foreach (var item in _pending)
             {
+                Log($"Canceled pending by clear '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)}");
                 item.Cancel(item.CancellationToken);
             }
 
             _pending.Clear();
+            NotifyChanged();
+
+            if (_current != null)
+            {
+                Log($"Cancel running by clear requested '{_current.Handle.Name}' id={_current.Handle.Id:N} scope={GetScopeName(_current.Scope)}");
+            }
+
             _currentCancellation?.Cancel();
         }
 
@@ -141,24 +166,31 @@ namespace UnityRequestQueue.Runtime.Network
 
                 if (item.IsCancellationRequested)
                 {
+                    Log($"Skipped canceled '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)}");
                     item.Cancel(item.CancellationToken);
+                    NotifyChanged();
                     continue;
                 }
 
                 _current = item;
                 _currentCancellation = item.CreateCancellation();
                 item.SetRunning();
+                Log($"Started '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)} pending={_pending.Count}");
+                NotifyChanged();
 
                 try
                 {
                     await item.ExecuteAsync(_httpClient, _currentCancellation.Token);
+                    Log($"Succeeded '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)}");
                 }
                 catch (OperationCanceledException)
                 {
+                    Log($"Canceled running '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)}");
                     item.Cancel(_currentCancellation.Token);
                 }
                 catch (Exception exception)
                 {
+                    Log($"Failed '{item.Handle.Name}' id={item.Handle.Id:N} scope={GetScopeName(item.Scope)} error={exception.Message}");
                     item.Fail(exception);
                 }
                 finally
@@ -166,7 +198,30 @@ namespace UnityRequestQueue.Runtime.Network
                     _currentCancellation.Dispose();
                     _currentCancellation = null;
                     _current = null;
+                    NotifyChanged();
                 }
+            }
+        }
+
+        private static void Log(string message)
+        {
+            Debug.Log($"[RequestQueue] {message}");
+        }
+
+        private static string GetScopeName(RequestScope scope)
+        {
+            return scope == null ? "none" : scope.Name;
+        }
+
+        private void NotifyChanged()
+        {
+            try
+            {
+                Changed?.Invoke();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
             }
         }
 

@@ -16,6 +16,8 @@ namespace UnityRequestQueue.Runtime.Features.Main
         private readonly ClickerConfig _clickerConfig;
 
         private PresenterHandle _clickerHandle;
+        private PresenterHandle _weatherHandle;
+        private PresenterHandle _dogBreedsHandle;
         private IDisposable _tabsSubscription;
         private TabId _activeTab;
         private bool _hasActiveTab;
@@ -35,6 +37,8 @@ namespace UnityRequestQueue.Runtime.Features.Main
             View.Tabs.Initialize(Parameters.InitialTab);
 
             await CreateClickerAsync(cancellationToken);
+            await CreateWeatherAsync(cancellationToken);
+            await CreateDogBreedsAsync(cancellationToken);
 
             _tabsSubscription = View.Tabs.Selected.Subscribe(
                 this,
@@ -52,6 +56,14 @@ namespace UnityRequestQueue.Runtime.Features.Main
             {
                 await _clickerHandle.Presenter.ExitAsync(cancellationToken);
             }
+            else if (_hasActiveTab && _activeTab == TabId.Weather)
+            {
+                await _weatherHandle.Presenter.ExitAsync(cancellationToken);
+            }
+            else if (_hasActiveTab && _activeTab == TabId.DogBreeds)
+            {
+                await _dogBreedsHandle.Presenter.ExitAsync(cancellationToken);
+            }
 
             _hasActiveTab = false;
         }
@@ -60,7 +72,11 @@ namespace UnityRequestQueue.Runtime.Features.Main
         {
             DisposeTabsSubscription();
             _clickerHandle?.Dispose();
+            _weatherHandle?.Dispose();
+            _dogBreedsHandle?.Dispose();
             _clickerHandle = null;
+            _weatherHandle = null;
+            _dogBreedsHandle = null;
         }
 
         private async UniTask CreateClickerAsync(CancellationToken cancellationToken)
@@ -74,6 +90,26 @@ namespace UnityRequestQueue.Runtime.Features.Main
             _clickerHandle.View.SetVisible(false);
         }
 
+        private async UniTask CreateWeatherAsync(CancellationToken cancellationToken)
+        {
+            var request = new PresenterRequest(
+                FeatureAssetKeys.Weather,
+                View.ViewContainer);
+
+            _weatherHandle = await _presenterFactory.CreateAsync(request, cancellationToken);
+            _weatherHandle.View.SetVisible(false);
+        }
+
+        private async UniTask CreateDogBreedsAsync(CancellationToken cancellationToken)
+        {
+            var request = new PresenterRequest(
+                FeatureAssetKeys.DogBreeds,
+                View.ViewContainer);
+
+            _dogBreedsHandle = await _presenterFactory.CreateAsync(request, cancellationToken);
+            _dogBreedsHandle.View.SetVisible(false);
+        }
+
         private async UniTask SwitchToTabAsync(TabId tabId, CancellationToken cancellationToken)
         {
             if (_hasActiveTab && _activeTab == tabId)
@@ -84,6 +120,17 @@ namespace UnityRequestQueue.Runtime.Features.Main
             if (_hasActiveTab && _activeTab == TabId.Clicker)
             {
                 await _clickerHandle.Presenter.ExitAsync(cancellationToken);
+                _clickerHandle.View.SetVisible(false);
+            }
+            else if (_hasActiveTab && _activeTab == TabId.Weather)
+            {
+                await _weatherHandle.Presenter.ExitAsync(cancellationToken);
+                _weatherHandle.View.SetVisible(false);
+            }
+            else if (_hasActiveTab && _activeTab == TabId.DogBreeds)
+            {
+                await _dogBreedsHandle.Presenter.ExitAsync(cancellationToken);
+                _dogBreedsHandle.View.SetVisible(false);
             }
 
             _activeTab = tabId;
@@ -91,7 +138,18 @@ namespace UnityRequestQueue.Runtime.Features.Main
 
             if (tabId == TabId.Clicker)
             {
+                _clickerHandle.View.SetVisible(true);
                 await _clickerHandle.Presenter.EnterAsync(cancellationToken);
+            }
+            else if (tabId == TabId.Weather)
+            {
+                _weatherHandle.View.SetVisible(true);
+                await _weatherHandle.Presenter.EnterAsync(cancellationToken);
+            }
+            else if (tabId == TabId.DogBreeds)
+            {
+                _dogBreedsHandle.View.SetVisible(true);
+                await _dogBreedsHandle.Presenter.EnterAsync(cancellationToken);
             }
         }
 

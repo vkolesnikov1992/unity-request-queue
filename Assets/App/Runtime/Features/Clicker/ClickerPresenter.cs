@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using UnityRequestQueue.Runtime.Audio;
 using UnityRequestQueue.Runtime.Features.Core;
+using UnityRequestQueue.Runtime.Pooling;
 using UnityRequestQueue.Runtime.User;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -11,13 +13,21 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
     public sealed class ClickerPresenter : TabPresenterBase<ClickerView, ClickerParameters, ClickerModel>
     {
         private readonly UserSection _userSection;
+        private readonly IAudioService _audioService;
+        private readonly IComponentPoolFactory _componentPoolFactory;
 
+        private IComponentPool<ClickerCoinParticle> _coinParticlePool;
         private bool _loopsStarted;
 
         [Preserve]
-        public ClickerPresenter(UserSection userSection)
+        public ClickerPresenter(
+            UserSection userSection,
+            IAudioService audioService,
+            IComponentPoolFactory componentPoolFactory)
         {
             _userSection = userSection;
+            _audioService = audioService;
+            _componentPoolFactory = componentPoolFactory;
         }
 
         public override TabId TabId => TabId.Clicker;
@@ -33,18 +43,23 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         protected override UniTask OnTabEnterAsync(CancellationToken cancellationToken)
         {
-            return UniTask.CompletedTask;
+            return CreateCoinParticlePoolAsync(cancellationToken);
         }
 
         protected override void OnDispose()
         {
             View.CollectButton.onClick.RemoveListener(OnCollectButtonClicked);
+            _coinParticlePool?.Dispose();
+            _coinParticlePool = null;
             base.OnDispose();
         }
 
         private void OnCollectButtonClicked()
         {
-            TryCollect(silent: false);
+            if (TryCollect())
+            {
+                PlayCollectFeedback();
+            }
         }
 
         private void StartLoops()
@@ -74,7 +89,10 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
                         continue;
                     }
 
-                    TryCollect(silent: !IsActive);
+                    if (TryCollect() && IsActive)
+                    {
+                        PlayCollectFeedback();
+                    }
                 }
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -100,7 +118,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
             }
         }
 
-        private bool TryCollect(bool silent)
+        private bool TryCollect()
         {
             var config = Parameters.Config;
             var resources = _userSection.Resources;
@@ -112,11 +130,6 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
             resources.Currency.Add(Math.Max(0, config.CurrencyPerClick));
             SyncModelWithResources();
-
-            if (!silent)
-            {
-                PlayCollectFeedback();
-            }
 
             return true;
         }
@@ -144,6 +157,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         private void PlayParticleBurst()
         {
+            View.PlayCoinBurst(LifetimeToken);
         }
 
         private void PlayCurrencyFlyAnimation()
@@ -152,15 +166,41 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         private void PlayButtonPressAnimation()
         {
+            View.PlayCollectButtonPunch(Parameters.Config);
         }
 
         private void PlayClickSound()
         {
+            if (string.IsNullOrWhiteSpace(Parameters.Config.ClickSoundKey))
+            {
+                return;
+            }
+
+            _audioService
+                .PlaySoundEffectAsync(Parameters.Config.ClickSoundKey, LifetimeToken)
+                .Forget(Debug.LogException);
         }
 
         private static float GetPositiveInterval(float intervalSeconds)
         {
             return Mathf.Max(0.01f, intervalSeconds);
+        }
+
+        private async UniTask CreateCoinParticlePoolAsync(CancellationToken cancellationToken)
+        {
+            if (_coinParticlePool != null)
+            {
+                return;
+            }
+
+            var request = new ComponentPoolRequest<ClickerCoinParticle>(
+                ComponentPoolAssetKey.FromAddressableKey(FeatureAssetKeys.ClickerCoinParticle),
+                View.CoinParticleRoot,
+                preloadCount: View.CoinParticlePreloadCount,
+                maxSize: View.CoinParticleMaxCount);
+
+            _coinParticlePool = await _componentPoolFactory.CreateAsync(request, cancellationToken);
+            View.InitializeCoinBurst(_coinParticlePool);
         }
     }
 }

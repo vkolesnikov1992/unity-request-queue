@@ -5,6 +5,7 @@ using UnityRequestQueue.Runtime.Network;
 using UnityRequestQueue.Runtime.Pooling;
 using UnityRequestQueue.Runtime.Presentation;
 using UnityRequestQueue.Runtime.Sections;
+using UnityRequestQueue.Runtime.UI;
 using UnityEngine;
 using Zenject;
 
@@ -71,6 +72,7 @@ namespace UnityRequestQueue.Runtime.Bootstrap
         {
             builder.RegisterModule(new CoreModule());
             builder.RegisterModule(new NetworkModule());
+            builder.RegisterModule(new UIModule());
             builder.RegisterModule(new AssetModule());
             builder.RegisterModule(new AudioModule());
             builder.RegisterModule(new SectionsModule());

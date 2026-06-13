@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6f1cf23ffa3a494d98b2a6352979246, type: 3}
   m_Name: ClickerConfig
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   _currencyPerClick: 1
   _energyCostPerClick: 1
   _maxEnergy: 1000
@@ -19,5 +19,9 @@ MonoBehaviour:
   _energyRestoreAmount: 10
   _energyRestoreIntervalSeconds: 10
   _autoCollectIntervalSeconds: 3
-  _autoCollectWhenInactive: 0
-  _clickSoundKey:
+  _autoCollectWhenInactive: 1
+  _clickSoundKey: Assets/Content/Audio/Sounds/currency-collect.wav
+  _buttonPunchScale: 0.08
+  _buttonPunchDurationSeconds: 0.18
+  _buttonPunchVibrato: 8
+  _buttonPunchElasticity: 0.7

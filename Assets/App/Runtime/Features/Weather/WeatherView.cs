@@ -1,3 +1,4 @@
+using TMPro;
 using UnityRequestQueue.Runtime.Presentation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,15 +11,17 @@ namespace UnityRequestQueue.Runtime.Features.Weather
         [SerializeField]
         private Image _weatherIcon;
         [SerializeField]
-        private Text _weatherText;
-        [SerializeField]
-        private GameObject _loader;
-        [SerializeField]
-        private Text _errorText;
+        private TextMeshProUGUI _weatherText;
 
-        public Image WeatherIcon => _weatherIcon;
-        public Text WeatherText => _weatherText;
-        public GameObject Loader => _loader;
-        public Text ErrorText => _errorText;
+        public void SetForecast(int temperature, string temperatureUnit)
+        {
+            _weatherText.text = $"Сегодня - {temperature}{temperatureUnit}";
+        }
+
+        public void SetWeatherIcon(Sprite icon)
+        {
+            _weatherIcon.sprite = icon;
+            _weatherIcon.enabled = icon != null;
+        }
     }
 }

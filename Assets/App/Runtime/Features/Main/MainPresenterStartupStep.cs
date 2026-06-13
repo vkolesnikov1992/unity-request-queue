@@ -5,7 +5,7 @@ using UnityRequestQueue.Runtime.Bootstrap;
 using UnityRequestQueue.Runtime.Factories;
 using UnityRequestQueue.Runtime.Features.Core;
 using UnityRequestQueue.Runtime.Presentation;
-using UnityEngine;
+using UnityRequestQueue.Runtime.UI;
 using UnityEngine.Scripting;
 
 namespace UnityRequestQueue.Runtime.Features.Main
@@ -13,13 +13,17 @@ namespace UnityRequestQueue.Runtime.Features.Main
     public sealed class MainPresenterStartupStep : IAppStartupStep, IDisposable
     {
         private readonly IAsyncFactory<PresenterRequest, PresenterHandle> _presenterFactory;
+        private readonly UICanvasRoot _canvasRoot;
 
         private PresenterHandle _mainHandle;
 
         [Preserve]
-        public MainPresenterStartupStep(IAsyncFactory<PresenterRequest, PresenterHandle> presenterFactory)
+        public MainPresenterStartupStep(
+            IAsyncFactory<PresenterRequest, PresenterHandle> presenterFactory,
+            UICanvasRoot canvasRoot)
         {
             _presenterFactory = presenterFactory;
+            _canvasRoot = canvasRoot;
         }
 
         public AppStartupStage Stage => AppStartupStage.Presentation;
@@ -30,8 +34,7 @@ namespace UnityRequestQueue.Runtime.Features.Main
 
         public async UniTask RunAsync(AppStartupContext context, CancellationToken cancellationToken)
         {
-            var presenterRoot = GetCanvasRoot();
-            var request = new PresenterRequest(FeatureAssetKeys.Main, presenterRoot);
+            var request = new PresenterRequest(FeatureAssetKeys.Main, _canvasRoot.Transform);
 
             _mainHandle = await _presenterFactory.CreateAsync(request, cancellationToken);
             await _mainHandle.Presenter.EnterAsync(cancellationToken);
@@ -41,19 +44,6 @@ namespace UnityRequestQueue.Runtime.Features.Main
         {
             _mainHandle?.Dispose();
             _mainHandle = null;
-        }
-
-        private static Transform GetCanvasRoot()
-        {
-            var canvas = UnityEngine.Object.FindFirstObjectByType<Canvas>();
-
-            if (!canvas)
-            {
-                throw new InvalidOperationException(
-                    $"Scene does not contain '{nameof(Canvas)}'. Add a Canvas before starting presentation.");
-            }
-
-            return canvas.transform;
         }
     }
 }

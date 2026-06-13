@@ -1,6 +1,5 @@
-using UnityRequestQueue.Runtime.Presentation;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityRequestQueue.Runtime.Presentation;
 
 namespace UnityRequestQueue.Runtime.Features.DogBreeds
 {
@@ -8,23 +7,44 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
     public sealed class DogBreedsView : ViewBase
     {
         [SerializeField]
-        private Transform _listRoot;
+        private Transform _breedsItemContainer;
         [SerializeField]
-        private Button _breedItemTemplate;
-        [SerializeField]
-        private GameObject _breedsLoader;
-        [SerializeField]
-        private GameObject _breedDetailsLoader;
-        [SerializeField]
-        private Text _errorText;
-        [SerializeField]
-        private BreedDetailsPopupView _detailsPopup;
+        private BreedDetailsPopup _detailsPopupPrefab;
 
-        public Transform ListRoot => _listRoot;
-        public Button BreedItemTemplate => _breedItemTemplate;
-        public GameObject BreedsLoader => _breedsLoader;
-        public GameObject BreedDetailsLoader => _breedDetailsLoader;
-        public Text ErrorText => _errorText;
-        public BreedDetailsPopupView DetailsPopup => _detailsPopup;
+        private BreedDetailsPopup _detailsPopup;
+
+        public Transform BreedsItemContainer => _breedsItemContainer;
+
+        public void CreatePopup(Transform root)
+        {
+            if (_detailsPopup != null)
+            {
+                return;
+            }
+
+            _detailsPopup = Instantiate(_detailsPopupPrefab, root);
+            _detailsPopup.Hide();
+        }
+
+        public void ShowPopup(string title, string description)
+        {
+            _detailsPopup.Show(title, description);
+        }
+
+        public void HidePopup()
+        {
+            _detailsPopup.Hide();
+        }
+
+        private void OnDestroy()
+        {
+            if (_detailsPopup == null)
+            {
+                return;
+            }
+
+            Destroy(_detailsPopup.gameObject);
+            _detailsPopup = null;
+        }
     }
 }

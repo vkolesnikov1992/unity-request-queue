@@ -126,6 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.Features.Clicker.ClickerView
   _resourcePanel: {fileID: 8757015636114853532}
   _collectButton: {fileID: 1145611925633079413}
+  _coinBurst: {fileID: 389730001417540001}
 --- !u!1 &5645575219044944445
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +249,7 @@ GameObject:
   - component: {fileID: 8113059130652872142}
   - component: {fileID: 8104804299616858654}
   - component: {fileID: 1145611925633079413}
+  - component: {fileID: 389730001417540001}
   m_Layer: 5
   m_Name: CollectButton
   m_TagString: Untagged
@@ -356,6 +358,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &389730001417540001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8932639657991192058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38973b6a41754dcdb00f6db1ad403710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.Features.Clicker.ClickerCoinBurst
+  _sourceImage: {fileID: 8104804299616858654}
+  _particleRoot: {fileID: 2914417993125767196}
+  _preloadCount: 30
+  _coinsPerBurst: 10
+  _coinSize: {x: 34, y: 34}
+  _spawnRadius: 10
+  _peakHeightRange: {x: 110, y: 170}
+  _peakHorizontalRange: {x: 25, y: 90}
+  _endHorizontalRange: {x: 70, y: 160}
+  _fallDistanceRange: {x: 90, y: 160}
+  _durationRange: {x: 0.55, y: 0.85}
+  _rotationRange: {x: 180, y: 540}
+  _startScale: 1
+  _endScale: 0.65
 --- !u!1001 &2733969580439923771
 PrefabInstance:
   m_ObjectHideFlags: 0

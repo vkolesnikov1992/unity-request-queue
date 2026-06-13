@@ -4,11 +4,9 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
 {
     public sealed class DogBreedsModel
     {
-        public bool IsLoadingBreeds { get; set; }
-
-        public bool IsLoadingBreedDetails { get; set; }
-
         public List<DogBreedListItem> Breeds { get; } = new();
+
+        public string BreedsUrl { get; set; }
 
         public DogBreedListItem SelectedBreed { get; set; }
 
@@ -26,5 +24,21 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         public string Id { get; }
 
         public string Name { get; }
+    }
+
+    public sealed class DogBreedDetails
+    {
+        public DogBreedDetails(string id, string name, string description)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+        }
+
+        public string Id { get; }
+
+        public string Name { get; }
+
+        public string Description { get; }
     }
 }
