@@ -34,7 +34,11 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds.Network
             }
 
             var detailsResponse = JsonUtility.FromJson<DogBreedDetailsResponse>(response.Text);
-            var breed = detailsResponse.data;
+            var breed = detailsResponse?.data;
+            if (breed?.attributes == null)
+            {
+                throw new InvalidOperationException("Dog breed response does not contain breed details.");
+            }
 
             return new DogBreedDetails(
                 breed.id,

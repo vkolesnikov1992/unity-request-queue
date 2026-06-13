@@ -33,10 +33,22 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds.Network
             }
 
             var breedsResponse = JsonUtility.FromJson<DogBreedsResponse>(response.Text);
-            var breeds = new List<DogBreedListItem>(breedsResponse.data.Length);
-
-            foreach (var breed in breedsResponse.data)
+            if (breedsResponse?.data == null)
             {
+                throw new InvalidOperationException("Dog breeds response does not contain breeds data.");
+            }
+
+            var count = Math.Min(10, breedsResponse.data.Length);
+            var breeds = new List<DogBreedListItem>(count);
+
+            for (var i = 0; i < count; i++)
+            {
+                var breed = breedsResponse.data[i];
+                if (breed?.attributes == null)
+                {
+                    continue;
+                }
+
                 breeds.Add(new DogBreedListItem(breed.id, breed.attributes.name));
             }
 

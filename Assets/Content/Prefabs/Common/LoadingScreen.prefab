@@ -221,6 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1532929374782608453}
+  - component: {fileID: 7842483175576941621}
   - component: {fileID: 5499894970146222228}
   m_Layer: 5
   m_Name: LoadingScreen
@@ -251,6 +252,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &7842483175576941621
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5017311592181224408}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5499894970146222228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beecf594b386413394efed5939a4d0c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.UI.LoadingScreen
+  _message: {fileID: 3475310254310161867}
 --- !u!1001 &2517995614380211215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -358,10 +372,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7399327193127564555, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2518354955441505567}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
 --- !u!224 &1030300920166055614 stripped
 RectTransform:
@@ -373,19 +384,3 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7399327193127564555, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
   m_PrefabInstance: {fileID: 2517995614380211215}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2518354955441505567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4926383062811281668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31638c314072455eae7921b9d354fb7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.Presentation.Helpers.TransformRotator
-  _target: {fileID: 1030300920166055614}
-  _axis: {x: 0, y: 0, z: 1}
-  _degreesPerSecond: -240
-  _useUnscaledTime: 1

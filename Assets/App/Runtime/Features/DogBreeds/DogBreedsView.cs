@@ -8,6 +8,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
     {
         [SerializeField]
         private Transform _breedsItemContainer;
+        
         [SerializeField]
         private BreedDetailsPopup _detailsPopupPrefab;
 
@@ -17,7 +18,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
 
         public void CreatePopup(Transform root)
         {
-            if (_detailsPopup != null)
+            if (_detailsPopup)
             {
                 return;
             }
@@ -38,7 +39,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
 
         private void OnDestroy()
         {
-            if (_detailsPopup == null)
+            if (!_detailsPopup)
             {
                 return;
             }

@@ -8,11 +8,17 @@ namespace UnityRequestQueue.Runtime.Network
     {
         private readonly Action<RequestHandle> _cancel;
 
-        internal RequestHandle(Guid id, string name, RequestScope scope, Action<RequestHandle> cancel)
+        internal RequestHandle(
+            Guid id,
+            string name,
+            RequestScope scope,
+            bool showLoadingScreen,
+            Action<RequestHandle> cancel)
         {
             Id = id;
             Name = string.IsNullOrWhiteSpace(name) ? id.ToString("N") : name;
             Scope = scope;
+            ShowLoadingScreen = showLoadingScreen;
             _cancel = cancel ?? throw new ArgumentNullException(nameof(cancel));
             Status = RequestStatus.Pending;
         }
@@ -22,6 +28,8 @@ namespace UnityRequestQueue.Runtime.Network
         public string Name { get; }
 
         public RequestScope Scope { get; }
+
+        public bool ShowLoadingScreen { get; }
 
         public RequestStatus Status { get; internal set; }
 
@@ -43,8 +51,13 @@ namespace UnityRequestQueue.Runtime.Network
         private readonly UniTaskCompletionSource<TResponse> _completion =
             new UniTaskCompletionSource<TResponse>();
 
-        internal RequestHandle(Guid id, string name, RequestScope scope, Action<RequestHandle> cancel)
-            : base(id, name, scope, cancel)
+        internal RequestHandle(
+            Guid id,
+            string name,
+            RequestScope scope,
+            bool showLoadingScreen,
+            Action<RequestHandle> cancel)
+            : base(id, name, scope, showLoadingScreen, cancel)
         {
         }
 

@@ -41,7 +41,13 @@ namespace UnityRequestQueue.Runtime.Features.Weather.Network
             }
 
             var forecastResponse = JsonUtility.FromJson<WeatherForecastResponse>(response.Text);
-            var period = forecastResponse.properties.periods[0];
+            var periods = forecastResponse?.properties?.periods;
+            if (periods == null || periods.Length == 0)
+            {
+                throw new InvalidOperationException("Weather response does not contain forecast periods.");
+            }
+
+            var period = periods[0];
 
             return new WeatherForecast(
                 period.temperature,

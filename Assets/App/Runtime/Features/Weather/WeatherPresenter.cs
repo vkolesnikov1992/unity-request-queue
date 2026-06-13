@@ -67,15 +67,24 @@ namespace UnityRequestQueue.Runtime.Features.Weather
 
         private async UniTask LoadWeatherAsync(CancellationToken cancellationToken)
         {
+            var showLoadingScreen = !HasCachedForecast();
             var handle = _requestQueue.Enqueue(
                 new WeatherForecastRequestCommand(Parameters.ForecastUrl),
-                RequestScope);
+                RequestScope,
+                showLoadingScreen);
 
             try
             {
                 var forecast = await handle.Task.AttachExternalCancellation(cancellationToken);
 
                 if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                Model.Error = null;
+
+                if (!HasForecastChanged(forecast))
                 {
                     return;
                 }
@@ -91,7 +100,6 @@ namespace UnityRequestQueue.Runtime.Features.Weather
                 Model.IconUrl = forecast.IconUrl;
                 Model.TemperatureFahrenheit = forecast.Temperature;
                 Model.TemperatureUnit = forecast.TemperatureUnit;
-                Model.Error = null;
 
                 View.SetForecast(forecast.Temperature, forecast.TemperatureUnit);
             }
@@ -108,6 +116,14 @@ namespace UnityRequestQueue.Runtime.Features.Weather
         {
             return string.Equals(Model.ForecastUrl, Parameters.ForecastUrl, StringComparison.Ordinal) &&
                    !string.IsNullOrWhiteSpace(Model.TemperatureUnit);
+        }
+
+        private bool HasForecastChanged(WeatherForecast forecast)
+        {
+            return !string.Equals(Model.ForecastUrl, Parameters.ForecastUrl, StringComparison.Ordinal) ||
+                   !string.Equals(Model.IconUrl, forecast.IconUrl, StringComparison.Ordinal) ||
+                   Model.TemperatureFahrenheit != forecast.Temperature ||
+                   !string.Equals(Model.TemperatureUnit, forecast.TemperatureUnit, StringComparison.Ordinal);
         }
 
         private UniTask DelayRefreshIntervalAsync(CancellationToken cancellationToken)

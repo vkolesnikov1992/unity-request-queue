@@ -21,6 +21,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         private readonly List<GameObject> _breedItemInstances = new();
 
         private RequestHandle<DogBreedDetails> _breedDetailsHandle;
+        private BreedItem _loadingBreedItem;
 
         [Preserve]
         public DogBreedsPresenter(
@@ -69,12 +70,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         {
             Model.Error = null;
             View.HidePopup();
-
-            if (HasCachedBreeds())
-            {
-                await RestoreCachedBreedsAsync(cancellationToken);
-                return;
-            }
+            ReleaseBreedItems();
 
             var handle = _requestQueue.Enqueue(
                 new DogBreedsRequestCommand(Parameters.BreedsUrl),
@@ -90,15 +86,9 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
                     return;
                 }
 
-                Model.Breeds.Clear();
-                Model.Breeds.AddRange(breeds);
-                Model.BreedsUrl = Parameters.BreedsUrl;
-
-                ReleaseBreedItems();
-
-                for (var i = 0; i < Model.Breeds.Count; i++)
+                for (var i = 0; i < breeds.Count; i++)
                 {
-                    await CreateBreedItemAsync(i + 1, Model.Breeds[i], cancellationToken);
+                    await CreateBreedItemAsync(i + 1, breeds[i], cancellationToken);
                 }
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested || handle.Status == RequestStatus.Canceled)
@@ -108,27 +98,6 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
             {
                 Model.Error = exception.Message;
                 Debug.LogException(exception);
-            }
-        }
-
-        private bool HasCachedBreeds()
-        {
-            return Model.Breeds.Count > 0 &&
-                   string.Equals(Model.BreedsUrl, Parameters.BreedsUrl, StringComparison.Ordinal);
-        }
-
-        private async UniTask RestoreCachedBreedsAsync(CancellationToken cancellationToken)
-        {
-            if (_breedItemInstances.Count == Model.Breeds.Count)
-            {
-                return;
-            }
-
-            ReleaseBreedItems();
-
-            for (var i = 0; i < Model.Breeds.Count; i++)
-            {
-                await CreateBreedItemAsync(i + 1, Model.Breeds[i], cancellationToken);
             }
         }
 
@@ -148,14 +117,25 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
             _breedItemInstances.Add(instance);
         }
 
-        private void OnBreedClicked(DogBreedListItem breed)
+        private void OnBreedClicked(BreedItem item)
         {
+            if (_loadingBreedItem == item &&
+                _breedDetailsHandle != null &&
+                !_breedDetailsHandle.IsCompleted)
+            {
+                return;
+            }
+
             CancelBreedDetailsRequest();
+            var breed = item.Breed;
             Model.SelectedBreed = breed;
-            LoadBreedDetailsAsync(breed, ActivationToken).Forget(Debug.LogException);
+
+            SetLoadingBreedItem(item);
+            LoadBreedDetailsAsync(item, breed, ActivationToken).Forget(Debug.LogException);
         }
 
         private async UniTask LoadBreedDetailsAsync(
+            BreedItem item,
             DogBreedListItem breed,
             CancellationToken cancellationToken)
         {
@@ -164,10 +144,10 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
 
             var handle = _requestQueue.Enqueue(
                 new DogBreedDetailsRequestCommand(Parameters.BreedDetailsBaseUrl, breed.Id),
-                RequestScope);
+                RequestScope,
+                showLoadingScreen: false);
 
             _breedDetailsHandle = handle;
-            using var loading = _loadingScreen.Show("Загрузка данных...");
 
             try
             {
@@ -194,6 +174,11 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
                 {
                     _breedDetailsHandle = null;
                 }
+
+                if (_loadingBreedItem == item)
+                {
+                    SetLoadingBreedItem(null);
+                }
             }
         }
 
@@ -205,10 +190,33 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
             }
 
             _breedDetailsHandle = null;
+            SetLoadingBreedItem(null);
+        }
+
+        private void SetLoadingBreedItem(BreedItem item)
+        {
+            if (_loadingBreedItem == item)
+            {
+                return;
+            }
+
+            if (_loadingBreedItem != null)
+            {
+                _loadingBreedItem.SetLoading(false);
+            }
+
+            _loadingBreedItem = item;
+
+            if (_loadingBreedItem != null)
+            {
+                _loadingBreedItem.SetLoading(true);
+            }
         }
 
         private void ReleaseBreedItems()
         {
+            SetLoadingBreedItem(null);
+
             foreach (var instance in _breedItemInstances)
             {
                 _assetProvider.ReleaseInstance(instance);

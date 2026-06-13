@@ -24,6 +24,10 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         public RectTransform CoinParticleRoot => _coinBurst.ParticleRoot;
         public int CoinParticlePreloadCount => _coinBurst.PreloadCount;
         public int CoinParticleMaxCount => _coinBurst.PreloadCount * 6;
+        public RectTransform CurrencyNotifyRoot => _coinBurst.ParticleRoot;
+        public Vector3 CurrencyNotifyStartPosition => _coinBurst.SourceWorldPosition;
+        public Sprite CurrencyNotifyIcon => _coinBurst.SourceSprite;
+        public Color CurrencyNotifyIconColor => _coinBurst.SourceColor;
 
         public void InitializeCoinBurst(IComponentPool<ClickerCoinParticle> particlePool)
         {

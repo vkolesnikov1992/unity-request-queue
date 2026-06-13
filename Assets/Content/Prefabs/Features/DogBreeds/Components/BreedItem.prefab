@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -170,6 +170,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4794753687383203043}
+  - {fileID: 5154790035245439626}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -273,3 +274,129 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.Features.DogBreeds.BreedItem
   _button: {fileID: 5052858842098015751}
   _label: {fileID: 647427675820944050}
+  _loadingSpin: {fileID: 7438758688208287413}
+--- !u!1001 &7724962711026128955
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4067080003049973803}
+    m_Modifications:
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185927581282262812, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185927581282262812, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185927581282262812, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Color.r
+      value: 0.03631115
+      objectReference: {fileID: 0}
+    - target: {fileID: 7399327193127564555, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+      propertyPath: m_Name
+      value: LoadingSpin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+--- !u!224 &5154790035245439626 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+  m_PrefabInstance: {fileID: 7724962711026128955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7438758688208287413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 869004741971586702, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
+  m_PrefabInstance: {fileID: 7724962711026128955}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e167c3b5d1241aaa948e8b91a8a7d42, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::UnityRequestQueue.Runtime.UI.LoadingSpin

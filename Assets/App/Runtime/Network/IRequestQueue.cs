@@ -10,9 +10,12 @@ namespace UnityRequestQueue.Runtime.Network
 
         int ActiveCount { get; }
 
+        int LoadingScreenActiveCount { get; }
+
         RequestHandle<TResponse> Enqueue<TResponse>(
             IRequestCommand<TResponse> command,
-            RequestScope scope = null);
+            RequestScope scope = null,
+            bool showLoadingScreen = true);
 
         void Cancel(RequestHandle handle);
 

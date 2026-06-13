@@ -37,7 +37,9 @@ namespace UnityRequestQueue.Runtime.Features.Main
             var request = new PresenterRequest(FeatureAssetKeys.Main, _canvasRoot.Transform);
 
             _mainHandle = await _presenterFactory.CreateAsync(request, cancellationToken);
+            _mainHandle.View.SetVisible(false);
             await _mainHandle.Presenter.EnterAsync(cancellationToken);
+            _mainHandle.View.SetVisible(true);
         }
 
         public void Dispose()

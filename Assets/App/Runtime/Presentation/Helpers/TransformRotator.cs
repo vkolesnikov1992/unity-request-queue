@@ -23,15 +23,8 @@ namespace UnityRequestQueue.Runtime.Presentation.Helpers
 
         private void Update()
         {
-            var target = Target;
-
-            if (!target)
-            {
-                return;
-            }
-
             var deltaTime = _useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-            target.Rotate(_axis, _degreesPerSecond * deltaTime, Space.Self);
+            Target.Rotate(_axis, _degreesPerSecond * deltaTime, Space.Self);
         }
     }
 }

@@ -44,6 +44,12 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         public int PreloadCount => _preloadCount;
 
+        public Vector3 SourceWorldPosition => _sourceImage.rectTransform.position;
+
+        public Sprite SourceSprite => _sourceImage.sprite;
+
+        public Color SourceColor => _sourceImage.color;
+
         public void Initialize(IComponentPool<ClickerCoinParticle> particlePool)
         {
             _particlePool = particlePool;

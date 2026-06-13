@@ -17,6 +17,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         private readonly IComponentPoolFactory _componentPoolFactory;
 
         private IComponentPool<ClickerCoinParticle> _coinParticlePool;
+        private IComponentPool<ClickerCurrencyNotify> _currencyNotifyPool;
         private bool _loopsStarted;
 
         [Preserve]
@@ -43,14 +44,16 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         protected override UniTask OnTabEnterAsync(CancellationToken cancellationToken)
         {
-            return CreateCoinParticlePoolAsync(cancellationToken);
+            return CreateFeedbackPoolsAsync(cancellationToken);
         }
 
         protected override void OnDispose()
         {
             View.CollectButton.onClick.RemoveListener(OnCollectButtonClicked);
             _coinParticlePool?.Dispose();
+            _currencyNotifyPool?.Dispose();
             _coinParticlePool = null;
+            _currencyNotifyPool = null;
             base.OnDispose();
         }
 
@@ -162,6 +165,12 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
         private void PlayCurrencyFlyAnimation()
         {
+            if (_currencyNotifyPool == null)
+            {
+                return;
+            }
+
+            PlayCurrencyFlyAnimationAsync(LifetimeToken).Forget(Debug.LogException);
         }
 
         private void PlayButtonPressAnimation()
@@ -186,6 +195,12 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
             return Mathf.Max(0.01f, intervalSeconds);
         }
 
+        private async UniTask CreateFeedbackPoolsAsync(CancellationToken cancellationToken)
+        {
+            await CreateCoinParticlePoolAsync(cancellationToken);
+            await CreateCurrencyNotifyPoolAsync(cancellationToken);
+        }
+
         private async UniTask CreateCoinParticlePoolAsync(CancellationToken cancellationToken)
         {
             if (_coinParticlePool != null)
@@ -201,6 +216,62 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
 
             _coinParticlePool = await _componentPoolFactory.CreateAsync(request, cancellationToken);
             View.InitializeCoinBurst(_coinParticlePool);
+        }
+
+        private async UniTask CreateCurrencyNotifyPoolAsync(CancellationToken cancellationToken)
+        {
+            if (_currencyNotifyPool != null)
+            {
+                return;
+            }
+
+            var config = Parameters.Config;
+            var preloadCount = Mathf.Max(0, config.CurrencyNotifyPreloadCount);
+            var maxCount = Math.Max(1, Math.Max(config.CurrencyNotifyMaxCount, preloadCount));
+            var request = new ComponentPoolRequest<ClickerCurrencyNotify>(
+                ComponentPoolAssetKey.FromAddressableKey(FeatureAssetKeys.ClickerCurrencyNotify),
+                View.CurrencyNotifyRoot,
+                preloadCount,
+                maxCount);
+
+            _currencyNotifyPool = await _componentPoolFactory.CreateAsync(request, cancellationToken);
+        }
+
+        private async UniTask PlayCurrencyFlyAnimationAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var notify = await _currencyNotifyPool.RentAsync(cancellationToken);
+                notify.Play(
+                    View.CurrencyNotifyStartPosition,
+                    View.CurrencyNotifyIcon,
+                    View.CurrencyNotifyIconColor,
+                    Parameters.Config.CurrencyPerClick.ToString(),
+                    CreateCurrencyNotifyMotion(),
+                    _currencyNotifyPool.Return);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogWarning(exception.Message);
+            }
+        }
+
+        private ClickerCurrencyNotifyMotion CreateCurrencyNotifyMotion()
+        {
+            var config = Parameters.Config;
+            var horizontalScatter = Mathf.Max(0f, config.CurrencyNotifyHorizontalScatter);
+            var horizontalOffset = UnityEngine.Random.Range(-horizontalScatter, horizontalScatter);
+
+            return new ClickerCurrencyNotifyMotion(
+                Vector2.zero,
+                new Vector2(horizontalOffset, Mathf.Max(0f, config.CurrencyNotifyVerticalDistance)),
+                Mathf.Max(0.01f, config.CurrencyNotifyStartScale),
+                Mathf.Max(0.01f, config.CurrencyNotifyEndScale),
+                Mathf.Max(0.01f, config.CurrencyNotifyDurationSeconds),
+                Mathf.Clamp01(config.CurrencyNotifyFadeDurationPercent));
         }
     }
 }

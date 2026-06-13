@@ -57,11 +57,6 @@ namespace UnityRequestQueue.Runtime.Audio
 
             _loadedClips.Clear();
 
-            if (_soundEffectsSource == null)
-            {
-                return;
-            }
-
             if (Application.isPlaying)
             {
                 UnityEngine.Object.Destroy(_soundEffectsSource.gameObject);

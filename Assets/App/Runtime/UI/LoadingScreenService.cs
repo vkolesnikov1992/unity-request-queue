@@ -182,7 +182,7 @@ namespace UnityRequestQueue.Runtime.UI
                 return;
             }
 
-            _queueVisible = _requestQueue.ActiveCount > 0;
+            _queueVisible = _requestQueue.LoadingScreenActiveCount > 0;
             UpdateVisibility();
         }
 

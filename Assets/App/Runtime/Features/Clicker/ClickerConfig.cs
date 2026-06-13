@@ -31,6 +31,22 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         private int _buttonPunchVibrato = 8;
         [SerializeField]
         private float _buttonPunchElasticity = 0.7f;
+        [SerializeField]
+        private int _currencyNotifyPreloadCount = 8;
+        [SerializeField]
+        private int _currencyNotifyMaxCount = 24;
+        [SerializeField]
+        private float _currencyNotifyVerticalDistance = 130f;
+        [SerializeField]
+        private float _currencyNotifyHorizontalScatter = 18f;
+        [SerializeField]
+        private float _currencyNotifyDurationSeconds = 0.85f;
+        [SerializeField]
+        private float _currencyNotifyFadeDurationPercent = 0.35f;
+        [SerializeField]
+        private float _currencyNotifyStartScale = 1f;
+        [SerializeField]
+        private float _currencyNotifyEndScale = 1.15f;
 
         public int CurrencyPerClick => _currencyPerClick;
         public int EnergyCostPerClick => _energyCostPerClick;
@@ -45,5 +61,13 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         public float ButtonPunchDurationSeconds => _buttonPunchDurationSeconds;
         public int ButtonPunchVibrato => _buttonPunchVibrato;
         public float ButtonPunchElasticity => _buttonPunchElasticity;
+        public int CurrencyNotifyPreloadCount => _currencyNotifyPreloadCount;
+        public int CurrencyNotifyMaxCount => _currencyNotifyMaxCount;
+        public float CurrencyNotifyVerticalDistance => _currencyNotifyVerticalDistance;
+        public float CurrencyNotifyHorizontalScatter => _currencyNotifyHorizontalScatter;
+        public float CurrencyNotifyDurationSeconds => _currencyNotifyDurationSeconds;
+        public float CurrencyNotifyFadeDurationPercent => _currencyNotifyFadeDurationPercent;
+        public float CurrencyNotifyStartScale => _currencyNotifyStartScale;
+        public float CurrencyNotifyEndScale => _currencyNotifyEndScale;
     }
 }

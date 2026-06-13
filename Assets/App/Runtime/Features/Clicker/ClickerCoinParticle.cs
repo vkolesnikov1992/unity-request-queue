@@ -38,6 +38,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         public float RotationDegrees { get; }
     }
 
+    [RequireComponent(typeof(Image))]
     public sealed class ClickerCoinParticle : MonoBehaviour, IPoolableComponent
     {
         [SerializeField]
@@ -90,18 +91,12 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
             KillAnimation();
         }
 
-        private void Awake()
-        {
-            EnsureComponents();
-        }
-
         private void Prepare(
             Vector3 worldPosition,
             Sprite sprite,
             Color color,
             ClickerCoinParticleMotion motion)
         {
-            EnsureComponents();
             KillAnimation();
 
             _rectTransform.position = worldPosition;
@@ -120,26 +115,13 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         {
             var completed = _completed;
             _completed = null;
-            completed?.Invoke(this);
+            completed.Invoke(this);
         }
 
         private void KillAnimation()
         {
             _sequence?.Kill();
             _sequence = null;
-        }
-
-        private void EnsureComponents()
-        {
-            if (_rectTransform == null)
-            {
-                _rectTransform = (RectTransform)transform;
-            }
-
-            if (_image == null)
-            {
-                _image = GetComponent<Image>();
-            }
         }
     }
 }

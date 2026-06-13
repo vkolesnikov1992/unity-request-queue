@@ -15,8 +15,18 @@ namespace UnityRequestQueue.Runtime.Features.Core
         protected sealed override async UniTask OnEnterAsync(CancellationToken cancellationToken)
         {
             IsActive = true;
-            View.SetVisible(true);
-            await OnTabEnterAsync(cancellationToken);
+
+            try
+            {
+                await OnTabEnterAsync(cancellationToken);
+                View.SetVisible(true);
+            }
+            catch
+            {
+                IsActive = false;
+                View.SetVisible(false);
+                throw;
+            }
         }
 
         protected sealed override async UniTask OnExitAsync(CancellationToken cancellationToken)
@@ -49,8 +59,18 @@ namespace UnityRequestQueue.Runtime.Features.Core
         protected sealed override async UniTask OnEnterAsync(CancellationToken cancellationToken)
         {
             IsActive = true;
-            View.SetVisible(true);
-            await OnTabEnterAsync(cancellationToken);
+
+            try
+            {
+                await OnTabEnterAsync(cancellationToken);
+                View.SetVisible(true);
+            }
+            catch
+            {
+                IsActive = false;
+                View.SetVisible(false);
+                throw;
+            }
         }
 
         protected sealed override async UniTask OnExitAsync(CancellationToken cancellationToken)

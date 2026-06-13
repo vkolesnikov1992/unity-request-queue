@@ -138,17 +138,14 @@ namespace UnityRequestQueue.Runtime.Features.Main
 
             if (tabId == TabId.Clicker)
             {
-                _clickerHandle.View.SetVisible(true);
                 await _clickerHandle.Presenter.EnterAsync(cancellationToken);
             }
             else if (tabId == TabId.Weather)
             {
-                _weatherHandle.View.SetVisible(true);
                 await _weatherHandle.Presenter.EnterAsync(cancellationToken);
             }
             else if (tabId == TabId.DogBreeds)
             {
-                _dogBreedsHandle.View.SetVisible(true);
                 await _dogBreedsHandle.Presenter.EnterAsync(cancellationToken);
             }
         }

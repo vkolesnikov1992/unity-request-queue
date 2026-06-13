@@ -1,13 +1,7 @@
-using System.Collections.Generic;
-
 namespace UnityRequestQueue.Runtime.Features.DogBreeds
 {
     public sealed class DogBreedsModel
     {
-        public List<DogBreedListItem> Breeds { get; } = new();
-
-        public string BreedsUrl { get; set; }
-
         public DogBreedListItem SelectedBreed { get; set; }
 
         public string Error { get; set; }

@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityRequestQueue.Runtime.UI;
 
 namespace UnityRequestQueue.Runtime.Features.DogBreeds
 {
@@ -13,16 +14,25 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         [SerializeField]
         private TextMeshProUGUI _label;
 
-        private Action<DogBreedListItem> _clicked;
+        [SerializeField]
+        private LoadingSpin _loadingSpin;
+
+        private Action<BreedItem> _clicked;
         public DogBreedListItem Breed { get; private set; }
 
-        public void Initialize(int index, DogBreedListItem breed, Action<DogBreedListItem> clicked)
+        public void Initialize(int index, DogBreedListItem breed, Action<BreedItem> clicked)
         {
             Breed = breed;
             _clicked = clicked;
             _label.text = $"{index} - {breed.Name}";
+            SetLoading(false);
             _button.onClick.RemoveListener(OnClicked);
             _button.onClick.AddListener(OnClicked);
+        }
+
+        public void SetLoading(bool isLoading)
+        {
+            _loadingSpin.gameObject.SetActive(isLoading);
         }
 
         private void OnDestroy()
@@ -32,7 +42,7 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
 
         private void OnClicked()
         {
-            _clicked?.Invoke(Breed);
+            _clicked.Invoke(this);
         }
     }
 }

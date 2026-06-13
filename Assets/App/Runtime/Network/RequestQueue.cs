@@ -31,16 +31,21 @@ namespace UnityRequestQueue.Runtime.Network
 
         public int ActiveCount => _pending.Count + (IsRunning ? 1 : 0);
 
+        public int LoadingScreenActiveCount =>
+            _pending.Count(item => item.Handle.ShowLoadingScreen) +
+            (_current != null && _current.Handle.ShowLoadingScreen ? 1 : 0);
+
         public RequestHandle<TResponse> Enqueue<TResponse>(
             IRequestCommand<TResponse> command,
-            RequestScope scope = null)
+            RequestScope scope = null,
+            bool showLoadingScreen = true)
         {
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var item = new RequestItem<TResponse>(command, scope, Cancel);
+            var item = new RequestItem<TResponse>(command, scope, showLoadingScreen, Cancel);
 
             if (scope != null && scope.IsCancellationRequested)
             {
@@ -271,6 +276,7 @@ namespace UnityRequestQueue.Runtime.Network
             public RequestItem(
                 IRequestCommand<TResponse> command,
                 RequestScope scope,
+                bool showLoadingScreen,
                 Action<RequestHandle> cancel)
                 : base(scope)
             {
@@ -279,6 +285,7 @@ namespace UnityRequestQueue.Runtime.Network
                     Guid.NewGuid(),
                     command.Name,
                     scope,
+                    showLoadingScreen,
                     cancel);
             }
 
