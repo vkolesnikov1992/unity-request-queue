@@ -15,6 +15,9 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         [SerializeField]
         private Button _continueButton;
 
+        [SerializeField] 
+        private VerticalLayoutGroup _layoutGroup;
+
         private void Awake()
         {
             _continueButton.onClick.AddListener(Hide);
@@ -29,8 +32,8 @@ namespace UnityRequestQueue.Runtime.Features.DogBreeds
         {
             _titleText.text = title;
             _descriptionText.text = description;
-            transform.SetAsLastSibling();
             gameObject.SetActive(true);
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_layoutGroup.transform);
         }
 
         public void Hide()

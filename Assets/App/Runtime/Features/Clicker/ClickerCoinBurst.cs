@@ -18,17 +18,17 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         [SerializeField]
         private int _coinsPerBurst = 10;
         [SerializeField]
-        private Vector2 _coinSize = new(34f, 34f);
+        private Vector2 _coinSize = new(170f, 170f);
         [SerializeField]
-        private float _spawnRadius = 10f;
+        private float _spawnRadius = 50f;
         [SerializeField]
-        private Vector2 _peakHeightRange = new(110f, 170f);
+        private Vector2 _peakHeightRange = new(550f, 850f);
         [SerializeField]
-        private Vector2 _peakHorizontalRange = new(25f, 90f);
+        private Vector2 _peakHorizontalRange = new(125f, 450f);
         [SerializeField]
-        private Vector2 _endHorizontalRange = new(70f, 160f);
+        private Vector2 _endHorizontalRange = new(350f, 800f);
         [SerializeField]
-        private Vector2 _fallDistanceRange = new(90f, 160f);
+        private Vector2 _fallDistanceRange = new(450f, 800f);
         [SerializeField]
         private Vector2 _durationRange = new(0.55f, 0.85f);
         [SerializeField]

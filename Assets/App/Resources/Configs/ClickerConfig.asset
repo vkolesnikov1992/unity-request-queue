@@ -27,7 +27,7 @@ MonoBehaviour:
   _buttonPunchElasticity: 0.7
   _currencyNotifyPreloadCount: 8
   _currencyNotifyMaxCount: 24
-  _currencyNotifyVerticalDistance: 130
+  _currencyNotifyVerticalDistance: 260
   _currencyNotifyHorizontalScatter: 18
   _currencyNotifyDurationSeconds: 0.85
   _currencyNotifyFadeDurationPercent: 0.35

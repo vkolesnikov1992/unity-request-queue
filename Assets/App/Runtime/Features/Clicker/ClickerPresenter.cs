@@ -246,7 +246,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
                     View.CurrencyNotifyStartPosition,
                     View.CurrencyNotifyIcon,
                     View.CurrencyNotifyIconColor,
-                    Parameters.Config.CurrencyPerClick.ToString(),
+                    $"+{Math.Max(0, Parameters.Config.CurrencyPerClick)}",
                     CreateCurrencyNotifyMotion(),
                     _currencyNotifyPool.Return);
             }

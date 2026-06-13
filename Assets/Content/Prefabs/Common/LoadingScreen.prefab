@@ -107,10 +107,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1532929374782608453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 291.91833}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 754}
+  m_SizeDelta: {x: -568, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &2728602465151774260
 CanvasRenderer:
@@ -167,10 +167,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -311,11 +311,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -377,10 +377,5 @@ PrefabInstance:
 --- !u!224 &1030300920166055614 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3223990820975592113, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
-  m_PrefabInstance: {fileID: 2517995614380211215}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4926383062811281668 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7399327193127564555, guid: 8479d8677b762664eaf1f8f1f9c56ddb, type: 3}
   m_PrefabInstance: {fileID: 2517995614380211215}
   m_PrefabAsset: {fileID: 0}

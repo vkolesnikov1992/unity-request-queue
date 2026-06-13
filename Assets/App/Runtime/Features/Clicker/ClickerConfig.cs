@@ -36,7 +36,7 @@ namespace UnityRequestQueue.Runtime.Features.Clicker
         [SerializeField]
         private int _currencyNotifyMaxCount = 24;
         [SerializeField]
-        private float _currencyNotifyVerticalDistance = 130f;
+        private float _currencyNotifyVerticalDistance = 260f;
         [SerializeField]
         private float _currencyNotifyHorizontalScatter = 18f;
         [SerializeField]
